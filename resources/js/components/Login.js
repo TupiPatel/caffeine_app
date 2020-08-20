@@ -8,6 +8,7 @@ class Login extends Component {
     this.state = {
       email: '',
       password: '',
+      errMsg :'',
       errors: []
     }
     this.handleFieldChange = this.handleFieldChange.bind(this)
@@ -36,7 +37,13 @@ class Login extends Component {
       .then(response => {
         // redirect to the homepage
         console.log(response)
-        history.push('/')
+        if(response.data == 'sucess'){
+          history.push('/welcome')
+        }
+        else{
+          this.setState({ errMsg : "Not Exist"})
+        }
+       
       })
       .catch(error => {
         console.log(error.response.data)
@@ -67,6 +74,7 @@ class Login extends Component {
         <div className='row justify-content-center'>
           <div className='col-md-6'>
             <div className='card'>
+            {this.state.errMsg}
               <div className='card-header'>Login</div>
               <div className='card-body'>
                 <form onSubmit={this.handleCreateNewProject}>
