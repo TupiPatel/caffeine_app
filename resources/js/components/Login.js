@@ -7,7 +7,7 @@ class Login extends Component {
     super(props)
     this.state = {
       email: '',
-      passwd: '',
+      password: '',
       errors: []
     }
     this.handleFieldChange = this.handleFieldChange.bind(this)
@@ -29,20 +29,8 @@ class Login extends Component {
 
     const project = {
       email: this.state.email,
-      passwd: this.state.passwd
+      password: this.state.password
     }
-
-   /* const user = {
-      firstname : 'tupi',
-      lastname: 'patel',
-      gender : 'female',
-      email: 'pateltupi@yahoo.com',
-      passwd: '1234',
-      confirm_passwd: '1234',
-      beverages: 'sdsdsdss',
-      max_consumed: '600',
- 
-    }*/
 
     axios.post('/api/login', project)
       .then(response => {
@@ -95,16 +83,16 @@ class Login extends Component {
                     {this.renderErrorFor('email')}
                   </div>
                   <div className='form-group'>
-                    <label htmlFor='passwd'>Password</label>
+                    <label htmlFor='password'>Password</label>
                     <input
-                      id='passwd'
+                      id='password'
                       type='password'
-                      className={`form-control ${this.hasErrorFor('passwd') ? 'is-invalid' : ''}`}
-                      name='passwd'
+                      className={`form-control ${this.hasErrorFor('password') ? 'is-invalid' : ''}`}
+                      name='password'
                       value={this.state.passwd}
                       onChange={this.handleFieldChange}
                     />
-                    {this.renderErrorFor('passwd')}
+                    {this.renderErrorFor('password')}
                   </div>
                   <button className='btn btn-primary'>Login</button>
                   <Link  to='/register'>Create new account</Link>

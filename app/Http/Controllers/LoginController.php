@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Customer;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -14,26 +15,22 @@ class LoginController extends Controller
    
 
         $validatedData = $request->validate([
-            'firstname' => 'required',
             'email' => 'required',
-            'passwd' => 'required',
+            'password' => 'required',
           ]);
-          $project = Customer::create([
-            'firstname' => $validatedData['firstname'],
-            'email' => $validatedData['email'],
-            'password' => $validatedData['passwd'],
-          ]);
-         /* $project = Customer::create([
-            'firstname' => $request->firstname,
-            'lastname' => $request->lastname,
-            'gender' => $request->gender,
-            'email' => $request->email,
-            'password' => $request->passwd,
-            'beverages' => $request->beverages,
-            'max_consumed' => $request->max_consumed,
-            'is_login' => 1
-          ]);*/
-  
-          return response()->json('Project created!');
+          $data =  Customer::where('email', '=', $validatedData['email'])->first();
+
+         
+         if (Hash::check($validatedData['password'],$data->password))
+         {
+          return response()->json('sucess');
+         }
+         else{
+          return response()->json('fail');
+         }
+        
+  //echo $validatedData['email'];
+ 
+         // return response()->json('Project created!');
     }
 }

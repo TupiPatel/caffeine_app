@@ -70051,7 +70051,7 @@ var Login = /*#__PURE__*/function (_Component) {
     _this = _super.call(this, props);
     _this.state = {
       email: '',
-      passwd: '',
+      password: '',
       errors: []
     };
     _this.handleFieldChange = _this.handleFieldChange.bind(_assertThisInitialized(_this));
@@ -70075,19 +70075,8 @@ var Login = /*#__PURE__*/function (_Component) {
       var history = this.props.history;
       var project = {
         email: this.state.email,
-        passwd: this.state.passwd
+        password: this.state.password
       };
-      /* const user = {
-         firstname : 'tupi',
-         lastname: 'patel',
-         gender : 'female',
-         email: 'pateltupi@yahoo.com',
-         passwd: '1234',
-         confirm_passwd: '1234',
-         beverages: 'sdsdsdss',
-         max_consumed: '600',
-          }*/
-
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/login', project).then(function (response) {
         // redirect to the homepage
         console.log(response);
@@ -70145,15 +70134,15 @@ var Login = /*#__PURE__*/function (_Component) {
       }), this.renderErrorFor('email')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "form-group"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
-        htmlFor: "passwd"
+        htmlFor: "password"
       }, "Password"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
-        id: "passwd",
+        id: "password",
         type: "password",
-        className: "form-control ".concat(this.hasErrorFor('passwd') ? 'is-invalid' : ''),
-        name: "passwd",
+        className: "form-control ".concat(this.hasErrorFor('password') ? 'is-invalid' : ''),
+        name: "password",
         value: this.state.passwd,
         onChange: this.handleFieldChange
-      }), this.renderErrorFor('passwd')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+      }), this.renderErrorFor('password')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
         className: "btn btn-primary"
       }, "Login"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
         to: "/register"
@@ -70188,6 +70177,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Checkbox__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Checkbox */ "./resources/js/components/Checkbox.jsx");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -70217,6 +70212,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
+
 var Register = /*#__PURE__*/function (_Component) {
   _inherits(Register, _Component);
 
@@ -70232,9 +70228,13 @@ var Register = /*#__PURE__*/function (_Component) {
       firstname: '',
       lastname: '',
       email: '',
-      passwd: '',
-      confirm_passwd: '',
+      password: '',
+      password_confirmation: '',
       checkedItems: new Map(),
+      setCheckedItems: [],
+      max_consumed: '',
+      selectedOption: 'Male',
+      msg: '',
       errors: []
     };
     _this.handleFieldChange = _this.handleFieldChange.bind(_assertThisInitialized(_this));
@@ -70242,6 +70242,7 @@ var Register = /*#__PURE__*/function (_Component) {
     _this.hasErrorFor = _this.hasErrorFor.bind(_assertThisInitialized(_this));
     _this.renderErrorFor = _this.renderErrorFor.bind(_assertThisInitialized(_this));
     _this.handleCheckboxChange = _this.handleCheckboxChange.bind(_assertThisInitialized(_this));
+    _this.onValueChange = _this.onValueChange.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -70256,20 +70257,44 @@ var Register = /*#__PURE__*/function (_Component) {
       var _this2 = this;
 
       event.preventDefault();
-      var history = this.props.history;
-      console.log(this.state.checkedItems);
+      var history = this.props.history; //console.log("radio : "+this.state.selectedOption)
+
+      var _iterator = _createForOfIteratorHelper(this.state.checkedItems),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var pair = _step.value;
+          console.log(pair);
+          this.state.setCheckedItems.push(pair);
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+
       var user = {
         firstname: this.state.firstname,
         lastname: this.state.lastname,
         email: this.state.email,
-        passwd: this.state.passwd,
-        confirm_passwd: this.state.confirm_passwd,
-        beverages: this.state.checkedItems
+        password: this.state.password,
+        password_confirmation: this.state.password_confirmation,
+        beverages: this.state.setCheckedItems,
+        max_consumed: this.state.max_consumed,
+        gender: this.state.selectedOption
       };
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/register', user).then(function (response) {
         // redirect to the homepage
-        console.log(response);
-        history.push('/');
+        console.log(response.data);
+
+        if (response.data == 'exist') {
+          _this2.setState({
+            msg: "Already Exist"
+          });
+        } else {
+          history.push('/');
+        }
       })["catch"](function (error) {
         console.log(error.response.data);
 
@@ -70297,17 +70322,19 @@ var Register = /*#__PURE__*/function (_Component) {
     value: function handleCheckboxChange(e) {
       var item = e.target.name;
       var isChecked = e.target.checked;
-      var bodyFormData = new FormData();
       this.setState(function (prevState) {
         return {
           checkedItems: prevState.checkedItems.set(item, isChecked)
         };
-      }); // console.log(this.state.checkedItems)
-
-      this.state.checkedItems.forEach(function (item) {
-        bodyFormData.append('checkedItems[]', item);
+      }); //console.log( this.state.checkedItems);
+    }
+  }, {
+    key: "onValueChange",
+    value: function onValueChange(event) {
+      this.setState({
+        selectedOption: event.target.value
       });
-      console.log(bodyFormData);
+      console.log(this.state.selectedOption);
     }
   }, {
     key: "render",
@@ -70322,7 +70349,7 @@ var Register = /*#__PURE__*/function (_Component) {
         className: "col-md-6"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "card"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      }, this.state.msg, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "card-header"
       }, "Registration"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "card-body"
@@ -70364,26 +70391,26 @@ var Register = /*#__PURE__*/function (_Component) {
       }), this.renderErrorFor('email')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "form-group"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
-        htmlFor: "passwd"
+        htmlFor: "password"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("b", null, "Password : ")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
-        id: "passwd",
+        id: "password",
         type: "password",
-        className: "form-control ".concat(this.hasErrorFor('passwd') ? 'is-invalid' : ''),
-        name: "passwd",
+        className: "form-control ".concat(this.hasErrorFor('password') ? 'is-invalid' : ''),
+        name: "password",
         value: this.state.passwd,
         onChange: this.handleFieldChange
-      }), this.renderErrorFor('passwd')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      }), this.renderErrorFor('password')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "form-group"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
-        htmlFor: "confirm_passwd"
+        htmlFor: "password_confirmation"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("b", null, " Confirm Password : ")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
-        id: "confirm_passwd",
+        id: "password_confirmation",
         type: "password",
-        className: "form-control ".concat(this.hasErrorFor('confirm_passwd') ? 'is-invalid' : ''),
-        name: "confirm_passwd",
+        className: "form-control ".concat(this.hasErrorFor('password_confirmation') ? 'is-invalid' : ''),
+        name: "password_confirmation",
         value: this.state.confirm_passwd,
         onChange: this.handleFieldChange
-      }), this.renderErrorFor('confirm_passwd')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      }), this.renderErrorFor('password_confirmation')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "form-group"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
         htmlFor: "beverages"
@@ -70395,7 +70422,58 @@ var Register = /*#__PURE__*/function (_Component) {
           checked: _this3.state.checkedItems.get(item.name),
           onChange: _this3.handleCheckboxChange
         }), " ", item.name);
-      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "form-group"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+        htmlFor: "max_consumed"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("b", null, "Maximum caffeine consume per day : ")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+        id: "max_consumed",
+        type: "text",
+        className: "form-control ".concat(this.hasErrorFor('max_consumed') ? 'is-invalid' : ''),
+        name: "max_consumed",
+        value: this.state.max_consumed,
+        onChange: this.handleFieldChange
+      }), this.renderErrorFor('max_consumed')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "form-group"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+        htmlFor: "gender"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("b", null, " Gender : ")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+        style: {
+          marginLeft: '15px'
+        }
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+        type: "radio",
+        value: "Male",
+        checked: this.state.selectedOption === "Male",
+        onChange: this.onValueChange,
+        style: {
+          marginRight: '10px'
+        }
+      }), "Male"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+        style: {
+          marginLeft: '15px'
+        }
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+        type: "radio",
+        value: "Female",
+        checked: this.state.selectedOption === "Female",
+        onChange: this.onValueChange,
+        style: {
+          marginRight: '10px'
+        }
+      }), "Female"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+        style: {
+          marginLeft: '15px'
+        }
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+        type: "radio",
+        value: "Other",
+        checked: this.state.selectedOption === "Other",
+        onChange: this.onValueChange,
+        style: {
+          marginRight: '10px'
+        }
+      }), "Other")), "Selected option is : ", this.state.selectedOption), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
         className: "btn btn-primary"
       }, "Register")))))));
     }

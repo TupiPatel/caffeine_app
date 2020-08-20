@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Customer;
+use Illuminate\Support\Facades\Hash;
 
 class RegisterController extends Controller
 {
@@ -15,29 +16,39 @@ class RegisterController extends Controller
 
         $validatedData = $request->validate([
             'firstname' => 'required',
-            'lastname' => 'required',
             'email' => 'required',
-            'passwd' => 'required',
-            'confirm_passwd' => 'required',
+            'password' => 'required|confirmed|min:6',
+            'password_confirmation' => 'required',
+            'max_consumed' => 'required'
           ]);
-         /* $project = Customer::create([
-            'firstname' => $validatedData['firstname'],
-            'lastname' => $validatedData['lastname'],
-            'email' => $validatedData['email'],
-            'password' => $validatedData['passwd'],
-          ]);
-         /* $project = Customer::create([
-            'firstname' => $request->firstname,
-            'lastname' => $request->lastname,
-            'gender' => $request->gender,
-            'email' => $request->email,
-            'password' => $request->passwd,
-            'beverages' => $request->beverages,
-            'max_consumed' => $request->max_consumed,
-            'is_login' => 1
-          ]);*/
-  
-          print_r($request->beverages);
-         // return response()->json('Project created!');
+
+          $count = count($request->beverages);
+          $checkbox = [];
+          $password = '';
+
+          for($i=0; $i<$count; $i++){
+            if($request->beverages[$i][1] == 1){
+              $checkbox[] = $request->beverages[$i][0];
+            }
+          }
+
+          if (Customer::where('email', '=', $validatedData['email'])->count() > 0) {
+               return response()->json('exist');
+          }
+          else{
+              $project = Customer::create([
+                'firstname' => $validatedData['firstname'],
+                'lastname' => $request->lastname,
+                'email' => $validatedData['email'],
+                'password' =>Hash::make( $validatedData['password']),
+                'beverages' => implode(', ', $checkbox),
+                'max_consumed' => $validatedData['max_consumed'],
+                'gender' => $request->gender
+              ]);
+              return response()->json('Project created!');
+            }
+          
+          //echo $request->gender;
+       
     }
 }
