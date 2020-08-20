@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+
 use App\Customer;
 
-class LoginController extends Controller
+class RegisterController extends Controller
 {
     //
     public function index(Request $request){
@@ -15,11 +15,14 @@ class LoginController extends Controller
 
         $validatedData = $request->validate([
             'firstname' => 'required',
+            'lastname' => 'required',
             'email' => 'required',
             'passwd' => 'required',
+            'confirm_passwd' => 'required',
           ]);
-          $project = Customer::create([
+         /* $project = Customer::create([
             'firstname' => $validatedData['firstname'],
+            'lastname' => $validatedData['lastname'],
             'email' => $validatedData['email'],
             'password' => $validatedData['passwd'],
           ]);
@@ -34,6 +37,7 @@ class LoginController extends Controller
             'is_login' => 1
           ]);*/
   
-          return response()->json('Project created!');
+          print_r($request->beverages);
+         // return response()->json('Project created!');
     }
 }

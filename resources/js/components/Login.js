@@ -32,6 +32,18 @@ class Login extends Component {
       passwd: this.state.passwd
     }
 
+   /* const user = {
+      firstname : 'tupi',
+      lastname: 'patel',
+      gender : 'female',
+      email: 'pateltupi@yahoo.com',
+      passwd: '1234',
+      confirm_passwd: '1234',
+      beverages: 'sdsdsdss',
+      max_consumed: '600',
+ 
+    }*/
+
     axios.post('/api/login', project)
       .then(response => {
         // redirect to the homepage

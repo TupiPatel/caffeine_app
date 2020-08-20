@@ -19,3 +19,4 @@ use Illuminate\Support\Facades\Route;
 });*/
 
 Route::post('login', 'LoginController@index');
+Route::post('register', 'RegisterController@index');
