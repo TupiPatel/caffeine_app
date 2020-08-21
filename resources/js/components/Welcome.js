@@ -10,6 +10,7 @@ class Welcome extends Component {
       user: {},
       allFav:[],
       userId: localStorage.getItem('userId'),
+      userName: localStorage.getItem('userName'),
       loggedIn: (localStorage.getItem('loggedIn') === "true")
       
     }
@@ -18,7 +19,7 @@ class Welcome extends Component {
       this.props.history.push('/');
     }
    
-    this.logout = this.logout.bind(this)
+
     this.order = this.order.bind(this)
     
   }
@@ -26,11 +27,7 @@ class Welcome extends Component {
   order(){
     this.props.history.push('/order/'+this.state.userId);
   }
-  logout(){
-    localStorage.removeItem('loggedIn');
-      localStorage.removeItem('userId');
-      this.props.history.push('/');
-  }
+ 
 
   componentDidMount () {
     const custId = this.props.match.params.id
@@ -54,8 +51,7 @@ class Welcome extends Component {
             <div className='row justify-content-center'>
               <div className='col-md-6'>
                 <div className='card'>
-                    <label onClick={this.logout}>Logout</label>
-                    <div className='card-header'>Welcome,{user.firstname} </div>
+                    <div className='card-header'>Welcome,{this.state.userName} </div>
                     <div className='card-body'>
                       <div>Your favourite drinks 
                         <div className='card-body'>

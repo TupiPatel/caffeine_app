@@ -22,3 +22,4 @@ Route::post('login', 'LoginController@index');
 Route::post('register', 'RegisterController@index');
 Route::get('customer/{id}', 'RegisterController@customerInfo');
 Route::post('order', 'RegisterController@orderCreate');
+Route::get('customer/transaction/{id}', 'RegisterController@transaction');

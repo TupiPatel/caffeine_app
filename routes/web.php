@@ -17,4 +17,6 @@ use Illuminate\Support\Facades\Route;
     return view('welcome');
 });*/
 
-Route::view('/{path?}','app');
+//Route::view('/{path?}','app');
+
+Route::get('/{path?}', function($path = null){         return View::make('app');     })->where('path', '.*'); 

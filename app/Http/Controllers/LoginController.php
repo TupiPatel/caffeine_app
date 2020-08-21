@@ -35,7 +35,8 @@ class LoginController extends Controller
 
           $info = [
             'message' => 'sucess',
-            'id' => $data->id
+            'id' => $data->id,
+            'firstname'=>$data->firstname
           ];
           return response()->json($info);
          }

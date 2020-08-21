@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import { result } from 'lodash'
 
 class Order extends Component {
 
@@ -10,6 +11,7 @@ class Order extends Component {
       user: {},
       allFav:[],
       userId: localStorage.getItem('userId'),
+      userName: localStorage.getItem('userName'),
       loggedIn: (localStorage.getItem('loggedIn') === "true"),
 
       errors : [],
@@ -29,7 +31,11 @@ class Order extends Component {
       size:'',
       drinkName : '',
       drinkSize : '',
-      caffeine : ''
+      caffeine : '',
+      max_caffeine : '',
+     arrCaffeine:[],
+     totalCaffeine:0,
+      status:''
 
     }
 
@@ -37,7 +43,7 @@ class Order extends Component {
       this.props.history.push('/');
     }
    
-    this.logout = this.logout.bind(this)
+  
     this.handleFieldChange = this.handleFieldChange.bind(this)
     this.handleCreateNewOrder = this.handleCreateNewOrder.bind(this)
     this.hasErrorFor = this.hasErrorFor.bind(this)
@@ -45,34 +51,10 @@ class Order extends Component {
     
   }
 
- 
-  logout(){
-    localStorage.removeItem('loggedIn');
-      localStorage.removeItem('userId');
-      this.props.history.push('/');
-  }
-
-  componentDidMount () {
-    const custId = this.props.match.params.id
-    
-
-    axios.get(`/api/customer/${custId}`).then(response => {
-      //console.log(response.data.beverages.split(','));
-      this.setState({
-        user: response.data,
-        allFav:response.data.beverages.split(',')
-      })
-    })
-  }
-
   handleFieldChange (event) {
-    this.setState(
-        {
+    this.setState({
             [event.target.name]: event.target.value
-        }   
-    )
-
-    
+        })
   }
 
   handleCreateNewOrder (event) {
@@ -80,6 +62,9 @@ class Order extends Component {
 
     const { history } = this.props
     const custId = this.props.match.params.id
+    this.state.arrCaffeine = []
+    this.state.errors = []
+
   
 
     console.log("enterd")
@@ -96,7 +81,8 @@ class Order extends Component {
         this.state.drinkName='Sugar Free NOS'
     else  if(this.state.drink == 5)
         this.state.drinkName='5 Hour Energy'
-
+    else
+        this.state.drinkName = ''
 
     if(this.state.size == 1)
     {
@@ -113,8 +99,12 @@ class Order extends Component {
         this.state.drinkSize = 'large'
         this.state.caffeine = '200'
     }
+    else{
+      this.state.drinkSize = ''
+      this.state.caffeine = ''
+    }
    
-//7console.log(this.state.drinkName + this.state.drinkSize + this.state.caffeine)
+
 
     const order = {
       custId : custId,
@@ -124,19 +114,47 @@ class Order extends Component {
       
     }
 
-   
-    axios.post('/api/order', order)
+    axios.get(`/api/customer/${custId}`).then(response => {
+      console.log("customer info")
+      console.log(response.data);
+      this.setState({
+        user: response.data,
+        allFav:response.data.beverages.split(','),
+        max_caffeine: response.data.max_consumed
+      })
+    })
+
+      axios.post('/api/order', order)
       .then(response => {
         // redirect to the homepage
         console.log(response.data)
 
-     /*   if(response.data == 'exist'){
-          this.setState({ msg : "Already Exist"})
-          
-        }
-        else{
-          history.push('/')
-        }*/
+        axios.get(`/api/customer/transaction/${custId}`).then(response => {
+          console.log("customer info")
+          console.log(this.state.max_caffeine)
+          console.log(response.data);
+  
+          const list = response.data.map((item) => {
+            console.log(item.caffeine)
+            this.state.arrCaffeine.push(parseInt(item.caffeine))
+          })
+  
+          this.state.totalCaffeine =  this.state.arrCaffeine.reduce((result,number)=> result+number);
+  
+          console.log(this.state.totalCaffeine) // 15
+  
+          if(this.state.max_caffeine < this.state.totalCaffeine){
+            this.setState({
+              status : 'You exceed your daily limit of caffeine'
+            })
+          }
+          else{
+            this.setState({
+              status : 'You can consume more caffeine as your maximum limit of caffeine'
+            })
+           
+          }
+        })
        
       })
       .catch(error => {
@@ -163,8 +181,7 @@ class Order extends Component {
   }
 
     render () {
-      const { user } = this.state
-      const {allFav} = this.state
+      
       let optionDrink = this.state.valuesDrink.map((v,key) => (
          
         <option key={key} value={v.id}>{v.name}</option>
@@ -173,16 +190,19 @@ class Order extends Component {
         
         <option key={key} value={v.id}>{v.name}</option>
       ));
+
+     
         return (
           
             <div className='container py-4'>
             <div className='row justify-content-center'>
               <div className='col-md-6'>
                 <div className='card'>
-                    <label onClick={this.logout}>Logout</label>
-                    <div className='card-header'>Hi ,{user.firstname} </div>
+                    
+                    <div className='card-header'>Hi ,{this.state.userName} </div>
                     <div className="card-body">
                         <div>Please place your order..</div>
+                        <div>{this.state.status}</div>
                     </div>
                     <div className='card-body'>
                         <form onSubmit={this.handleCreateNewOrder}>
@@ -197,7 +217,7 @@ class Order extends Component {
                                 className={`form-control ${this.hasErrorFor('drink') ? 'is-invalid' : ''}`}
                                 onChange={this.handleFieldChange}
                              >
-                            <option>-- Select drink --</option>
+                            <option value='0'>-- Select drink --</option>
                             {optionDrink}
                             </select>
                             {this.renderErrorFor('drink')}
@@ -211,7 +231,7 @@ class Order extends Component {
                                     className={`form-control ${this.hasErrorFor('size') ? 'is-invalid' : ''}`}
                                     onChange={this.handleFieldChange}
                                 >
-                                <option>-- Select size --</option>
+                                <option value='0'>-- Select size --</option>
                                 {optionSize}
                                 </select>
                                 {this.renderErrorFor('size')}

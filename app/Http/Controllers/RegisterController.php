@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Customer;
 use App\Transaction;
-
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 
 class RegisterController extends Controller
@@ -83,6 +83,25 @@ class RegisterController extends Controller
         'caffeine' => $request->caffeine,
       ]);
       return response()->json('Order created!');
+
+    }
+
+    public function transaction($id){
+
+      $dataDaily = Transaction::where('custId', '=', $id)
+                              ->whereDate('created_at','=', Carbon::today())->get();
+
+   //   print_r($dataDaily);
+    //  exit;
+
+      $dataDaily = $dataDaily->toArray();
+
+      $collectionDaily = collect($dataDaily);
+
+      $result = $collectionDaily;
+
+      
+      return $result->toJson();
 
     }
 }

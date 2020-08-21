@@ -42,9 +42,11 @@ class Login extends Component {
     axios.post('/api/login', project)
       .then(response => {
         // redirect to the homepage
-        console.log(response.data['message'])
+        console.log(response.data)
+        console.log(response.data['firstname'])
 
         localStorage.setItem('userId', response.data['id']);
+        localStorage.setItem('userName', response.data['firstname']);
         localStorage.setItem('loggedIn', "true");
 
         if(response.data['message'] == 'sucess'){
@@ -61,9 +63,6 @@ class Login extends Component {
           errors: error.response.data.errors
       
         })
-
-        if(localStorage.getItem('userId') !== null) return localStorage.removeItem('userId');
-        if(localStorage.getItem('loggedIn') !== null) return localStorage.removeItem('loggedIn');
    
       })
   }
