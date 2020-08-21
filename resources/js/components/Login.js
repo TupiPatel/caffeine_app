@@ -15,6 +15,12 @@ class Login extends Component {
     this.handleCreateNewProject = this.handleCreateNewProject.bind(this)
     this.hasErrorFor = this.hasErrorFor.bind(this)
     this.renderErrorFor = this.renderErrorFor.bind(this)
+
+    const { history } = this.props
+
+    if(localStorage.getItem('loggedIn') === 'true' ){
+      history.push('/welcome/'+localStorage.getItem('userId'))
+    }
   }
 
   handleFieldChange (event) {
@@ -36,9 +42,13 @@ class Login extends Component {
     axios.post('/api/login', project)
       .then(response => {
         // redirect to the homepage
-        console.log(response)
-        if(response.data == 'sucess'){
-          history.push('/welcome')
+        console.log(response.data['message'])
+
+        localStorage.setItem('userId', response.data['id']);
+        localStorage.setItem('loggedIn', "true");
+
+        if(response.data['message'] == 'sucess'){
+          history.push('/welcome/'+response.data['id'])
         }
         else{
           this.setState({ errMsg : "Not Exist"})
@@ -51,6 +61,10 @@ class Login extends Component {
           errors: error.response.data.errors
       
         })
+
+        if(localStorage.getItem('userId') !== null) return localStorage.removeItem('userId');
+        if(localStorage.getItem('loggedIn') !== null) return localStorage.removeItem('loggedIn');
+   
       })
   }
 

@@ -69850,7 +69850,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /*!****************************************!*\
   !*** ./resources/js/components/App.js ***!
   \****************************************/
-/*! no exports provided */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -69864,6 +69864,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Login__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Login */ "./resources/js/components/Login.js");
 /* harmony import */ var _Register__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Register */ "./resources/js/components/Register.js");
 /* harmony import */ var _Welcome__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Welcome */ "./resources/js/components/Welcome.js");
+/* harmony import */ var _Order__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Order */ "./resources/js/components/Order.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -69894,18 +69895,31 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
+
+
 var App = /*#__PURE__*/function (_Component) {
   _inherits(App, _Component);
 
   var _super = _createSuper(App);
 
-  function App() {
+  function App(props) {
+    var _this;
+
     _classCallCheck(this, App);
 
-    return _super.apply(this, arguments);
+    _this = _super.call(this, props);
+    _this.logout = _this.logout.bind(_assertThisInitialized(_this));
+    return _this;
   }
 
   _createClass(App, [{
+    key: "logout",
+    value: function logout() {
+      localStorage.removeItem('loggedIn');
+      localStorage.removeItem('userId');
+      this.props.history.push('/');
+    }
+  }, {
     key: "render",
     value: function render() {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["BrowserRouter"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Header__WEBPACK_IMPORTED_MODULE_3__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Switch"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Route"], {
@@ -69914,12 +69928,20 @@ var App = /*#__PURE__*/function (_Component) {
         component: _Login__WEBPACK_IMPORTED_MODULE_4__["default"]
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Route"], {
         exact: true,
+        path: "/logout",
+        render: this.logout
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Route"], {
+        exact: true,
         path: "/register",
         component: _Register__WEBPACK_IMPORTED_MODULE_5__["default"]
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Route"], {
         exact: true,
-        path: "/welcome",
+        path: "/welcome/:id",
         component: _Welcome__WEBPACK_IMPORTED_MODULE_6__["default"]
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Route"], {
+        exact: true,
+        path: "/order/:id",
+        component: _Order__WEBPACK_IMPORTED_MODULE_7__["default"]
       }))));
     }
   }]);
@@ -69927,6 +69949,7 @@ var App = /*#__PURE__*/function (_Component) {
   return App;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["withRouter"])(App));
 react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(App, null), document.getElementById('app'));
 
 /***/ }),
@@ -69981,21 +70004,27 @@ Checkbox.propTypes = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+
 
 
 
 var Header = function Header() {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("nav", {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("nav", {
     className: "navbar navbar-expand-md navbar-light navbar-laravel"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "container"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
     className: "navbar-brand",
     to: "/"
-  }, "Caffeine App")));
+  }, "Caffeine App"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
+    className: "navbar-brand",
+    to: "/logout"
+  }, "Logout")));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Header);
@@ -70065,6 +70094,12 @@ var Login = /*#__PURE__*/function (_Component) {
     _this.handleCreateNewProject = _this.handleCreateNewProject.bind(_assertThisInitialized(_this));
     _this.hasErrorFor = _this.hasErrorFor.bind(_assertThisInitialized(_this));
     _this.renderErrorFor = _this.renderErrorFor.bind(_assertThisInitialized(_this));
+    var history = _this.props.history;
+
+    if (localStorage.getItem('loggedIn') === 'true') {
+      history.push('/welcome/' + localStorage.getItem('userId'));
+    }
+
     return _this;
   }
 
@@ -70086,10 +70121,12 @@ var Login = /*#__PURE__*/function (_Component) {
       };
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/login', project).then(function (response) {
         // redirect to the homepage
-        console.log(response);
+        console.log(response.data['message']);
+        localStorage.setItem('userId', response.data['id']);
+        localStorage.setItem('loggedIn', "true");
 
-        if (response.data == 'sucess') {
-          history.push('/welcome');
+        if (response.data['message'] == 'sucess') {
+          history.push('/welcome/' + response.data['id']);
         } else {
           _this2.setState({
             errMsg: "Not Exist"
@@ -70101,6 +70138,9 @@ var Login = /*#__PURE__*/function (_Component) {
         _this2.setState({
           errors: error.response.data.errors
         });
+
+        if (localStorage.getItem('userId') !== null) return localStorage.removeItem('userId');
+        if (localStorage.getItem('loggedIn') !== null) return localStorage.removeItem('loggedIn');
       });
     }
   }, {
@@ -70168,6 +70208,265 @@ var Login = /*#__PURE__*/function (_Component) {
 }(react__WEBPACK_IMPORTED_MODULE_1__["Component"]);
 
 /* harmony default export */ __webpack_exports__["default"] = (Login);
+
+/***/ }),
+
+/***/ "./resources/js/components/Order.js":
+/*!******************************************!*\
+  !*** ./resources/js/components/Order.js ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+
+
+
+
+var Order = /*#__PURE__*/function (_Component) {
+  _inherits(Order, _Component);
+
+  var _super = _createSuper(Order);
+
+  function Order(props) {
+    var _this;
+
+    _classCallCheck(this, Order);
+
+    _this = _super.call(this, props);
+    _this.state = {
+      user: {},
+      allFav: [],
+      userId: localStorage.getItem('userId'),
+      loggedIn: localStorage.getItem('loggedIn') === "true",
+      errors: [],
+      valuesDrink: [{
+        name: 'Monster Ultra Sunrise',
+        id: 1
+      }, {
+        name: 'Black Coffee',
+        id: 2
+      }, {
+        name: 'Americano',
+        id: 3
+      }, {
+        name: 'Sugar Free NOS',
+        id: 4
+      }, {
+        name: '5 Hour Energy',
+        id: 5
+      }],
+      drink: '',
+      valuesSize: [{
+        name: 'Small (75mg Caffeine)',
+        id: 1
+      }, {
+        name: 'Medium (130mg Caffeine)',
+        id: 2
+      }, {
+        name: 'Large (200mg Caffeine)',
+        id: 3
+      }],
+      size: '',
+      drinkName: '',
+      drinkSize: '',
+      caffeine: ''
+    };
+
+    if (localStorage.getItem('userId') === null) {
+      _this.props.history.push('/');
+    }
+
+    _this.logout = _this.logout.bind(_assertThisInitialized(_this));
+    _this.handleFieldChange = _this.handleFieldChange.bind(_assertThisInitialized(_this));
+    _this.handleCreateNewOrder = _this.handleCreateNewOrder.bind(_assertThisInitialized(_this));
+    _this.hasErrorFor = _this.hasErrorFor.bind(_assertThisInitialized(_this));
+    _this.renderErrorFor = _this.renderErrorFor.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(Order, [{
+    key: "logout",
+    value: function logout() {
+      localStorage.removeItem('loggedIn');
+      localStorage.removeItem('userId');
+      this.props.history.push('/');
+    }
+  }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      var custId = this.props.match.params.id;
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/customer/".concat(custId)).then(function (response) {
+        //console.log(response.data.beverages.split(','));
+        _this2.setState({
+          user: response.data,
+          allFav: response.data.beverages.split(',')
+        });
+      });
+    }
+  }, {
+    key: "handleFieldChange",
+    value: function handleFieldChange(event) {
+      this.setState(_defineProperty({}, event.target.name, event.target.value));
+    }
+  }, {
+    key: "handleCreateNewOrder",
+    value: function handleCreateNewOrder(event) {
+      var _this3 = this;
+
+      event.preventDefault();
+      var history = this.props.history;
+      var custId = this.props.match.params.id;
+      console.log("enterd");
+      console.log(this.state.drink);
+      console.log(this.state.size);
+      if (this.state.drink == 1) this.state.drinkName = 'Monster Ultra Sunrise';else if (this.state.drink == 2) this.state.drinkName = 'Black Coffee';else if (this.state.drink == 3) this.state.drinkName = 'Americano';else if (this.state.drink == 4) this.state.drinkName = 'Sugar Free NOS';else if (this.state.drink == 5) this.state.drinkName = '5 Hour Energy';
+
+      if (this.state.size == 1) {
+        this.state.drinkSize = 'small';
+        this.state.caffeine = '75';
+      } else if (this.state.size == 2) {
+        this.state.drinkSize = 'medium';
+        this.state.caffeine = '130';
+      } else if (this.state.size == 3) {
+        this.state.drinkSize = 'large';
+        this.state.caffeine = '200';
+      } //7console.log(this.state.drinkName + this.state.drinkSize + this.state.caffeine)
+
+
+      var order = {
+        custId: custId,
+        drink: this.state.drinkName,
+        size: this.state.drinkSize,
+        caffeine: this.state.caffeine
+      };
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/order', order).then(function (response) {
+        // redirect to the homepage
+        console.log(response.data);
+        /*   if(response.data == 'exist'){
+             this.setState({ msg : "Already Exist"})
+             
+           }
+           else{
+             history.push('/')
+           }*/
+      })["catch"](function (error) {
+        console.log(error.response.data);
+
+        _this3.setState({
+          errors: error.response.data.errors
+        });
+      });
+    }
+  }, {
+    key: "hasErrorFor",
+    value: function hasErrorFor(field) {
+      return !!this.state.errors[field];
+    }
+  }, {
+    key: "renderErrorFor",
+    value: function renderErrorFor(field) {
+      if (this.hasErrorFor(field)) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
+          className: "invalid-feedback"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("strong", null, this.state.errors[field][0]));
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var user = this.state.user;
+      var allFav = this.state.allFav;
+      var optionDrink = this.state.valuesDrink.map(function (v, key) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
+          key: key,
+          value: v.id
+        }, v.name);
+      });
+      var optionSize = this.state.valuesSize.map(function (v, key) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
+          key: key,
+          value: v.id
+        }, v.name);
+      });
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "container py-4"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "row justify-content-center"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "col-md-6"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "card"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+        onClick: this.logout
+      }, "Logout"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "card-header"
+      }, "Hi ,", user.firstname, " "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "card-body"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, "Please place your order..")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "card-body"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("form", {
+        onSubmit: this.handleCreateNewOrder
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "form-group"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("b", null, " Pick your favorite drink :")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("select", {
+        id: "drink",
+        name: "drink",
+        value: this.state.value,
+        className: "form-control ".concat(this.hasErrorFor('drink') ? 'is-invalid' : ''),
+        onChange: this.handleFieldChange
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", null, "-- Select drink --"), optionDrink), this.renderErrorFor('drink')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "form-group"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+        htmlFor: "size"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("b", null, "Size : ")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("select", {
+        id: "size",
+        name: "size",
+        value: this.state.value,
+        className: "form-control ".concat(this.hasErrorFor('size') ? 'is-invalid' : ''),
+        onChange: this.handleFieldChange
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", null, "-- Select size --"), optionSize), this.renderErrorFor('size')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+        className: "btn btn-primary"
+      }, "Checkout")))))));
+    }
+  }]);
+
+  return Order;
+}(react__WEBPACK_IMPORTED_MODULE_1__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (Order);
 
 /***/ }),
 
@@ -70545,15 +70844,59 @@ var Welcome = /*#__PURE__*/function (_Component) {
 
   var _super = _createSuper(Welcome);
 
-  function Welcome() {
+  function Welcome(props) {
+    var _this;
+
     _classCallCheck(this, Welcome);
 
-    return _super.apply(this, arguments);
+    _this = _super.call(this, props);
+    _this.state = {
+      user: {},
+      allFav: [],
+      userId: localStorage.getItem('userId'),
+      loggedIn: localStorage.getItem('loggedIn') === "true"
+    };
+
+    if (localStorage.getItem('userId') === null) {
+      _this.props.history.push('/');
+    }
+
+    _this.logout = _this.logout.bind(_assertThisInitialized(_this));
+    _this.order = _this.order.bind(_assertThisInitialized(_this));
+    return _this;
   }
 
   _createClass(Welcome, [{
+    key: "order",
+    value: function order() {
+      this.props.history.push('/order/' + this.state.userId);
+    }
+  }, {
+    key: "logout",
+    value: function logout() {
+      localStorage.removeItem('loggedIn');
+      localStorage.removeItem('userId');
+      this.props.history.push('/');
+    }
+  }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      var custId = this.props.match.params.id;
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/customer/".concat(custId)).then(function (response) {
+        //console.log(response.data.beverages.split(','));
+        _this2.setState({
+          user: response.data,
+          allFav: response.data.beverages.split(',')
+        });
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
+      var user = this.state.user;
+      var allFav = this.state.allFav;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "container py-4"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
@@ -70562,9 +70905,22 @@ var Welcome = /*#__PURE__*/function (_Component) {
         className: "col-md-6"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "card"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+        onClick: this.logout
+      }, "Logout"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "card-header"
-      }, "Welcome")))));
+      }, "Welcome,", user.firstname, " "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "card-body"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, "Your favourite drinks", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "card-body"
+      }, allFav.map(function (el, i) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", {
+          key: i
+        }, el);
+      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, "You can comsume maximum caffeine ", user.max_consumed, "mg"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+        className: "btn btn-primary",
+        onClick: this.order
+      }, "Order Now")))))));
     }
   }]);
 

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Customer;
+use App\Transaction;
+
 use Illuminate\Support\Facades\Hash;
 
 class RegisterController extends Controller
@@ -36,7 +38,7 @@ class RegisterController extends Controller
                return response()->json('exist');
           }
           else{
-              $project = Customer::create([
+              $User = Customer::create([
                 'firstname' => $validatedData['firstname'],
                 'lastname' => $request->lastname,
                 'email' => $validatedData['email'],
@@ -45,10 +47,42 @@ class RegisterController extends Controller
                 'max_consumed' => $validatedData['max_consumed'],
                 'gender' => $request->gender
               ]);
-              return response()->json('Project created!');
+              return response()->json('Customer created!');
             }
           
           //echo $request->gender;
        
+    }
+
+    public function customerInfo($id){
+      $dataCust = Customer::find($id);
+
+      $dataCust = $dataCust->toArray();
+
+      $collection = collect($dataCust);
+
+      $result = $collection->except('password');
+
+      
+      return $result->toJson();
+    }
+
+    public function orderCreate(Request $request){
+
+      $validatedData = $request->validate([
+        'drink' => 'required',
+        'size' => 'required',
+      ]);
+
+      
+
+      $Order = Transaction::create([
+        'custId' =>$request->custId,
+        'typeOfDrink' => $validatedData['drink'],
+        'size' => $validatedData['size'],
+        'caffeine' => $request->caffeine,
+      ]);
+      return response()->json('Order created!');
+
     }
 }

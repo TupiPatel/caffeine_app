@@ -15,29 +15,10 @@ class LoginController extends Controller
     public function __construct(Request $request) {
       
      
-     $this->middleware(function ($request, $next) {
-      // fetch session and use it in entire class with constructor
-      $this->cart_info = session()->get('my_name');
-      
-      //exit;
-     // echo $this->cart_info;
-    //  exit;
-      if($this->cart_info != '')
-      {
-        return response()->json('sucess');
-        exit;
-      }
-        return $next($request);
-      });
-
-     
    }
-
-
 
     public function index(Request $request){
 
-     
   
         $validatedData = $request->validate([
             'email' => 'required',
@@ -50,8 +31,13 @@ class LoginController extends Controller
          {
            $data->is_login = 1;
            $data->save();
-           $request->session()->put('my_name','Virat Gandhi');
-          return response()->json('sucess');
+          // $request->session()->put('my_name','Virat Gandhi');
+
+          $info = [
+            'message' => 'sucess',
+            'id' => $data->id
+          ];
+          return response()->json($info);
          }
          else{
           return response()->json('fail');

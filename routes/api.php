@@ -20,3 +20,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('login', 'LoginController@index');
 Route::post('register', 'RegisterController@index');
+Route::get('customer/{id}', 'RegisterController@customerInfo');
+Route::post('order', 'RegisterController@orderCreate');
