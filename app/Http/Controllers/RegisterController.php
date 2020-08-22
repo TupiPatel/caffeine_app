@@ -82,7 +82,9 @@ class RegisterController extends Controller
         'size' => $validatedData['size'],
         'caffeine' => $request->caffeine,
       ]);
-      return response()->json('Order created!');
+
+      
+      return $Order->toJson();
 
     }
 

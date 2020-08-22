@@ -17,7 +17,7 @@ import { withRouter } from 'react-router-dom';
       constructor (props) {
         super(props)
         this.state={
-          custId : localStorage.getItem('userId')
+          custId : ''
         }
         
       this.logout = this.logout.bind(this)
@@ -32,15 +32,17 @@ import { withRouter } from 'react-router-dom';
       
       }
       componentDidMount () {
-    
+        this.setState({
+          custId1 : localStorage.getItem('userId')
+        })
       }
       
       render() {
-        const isLoggedIn = this.state.custId;
+        const isLoggedIn = this.state.custId1;
         let link1,link2,link3;
         if (isLoggedIn != null) {
-          link1 =  <Link className='navbar-brand' to={`/welcome/${this.state.custId}`} >Home</Link>
-          link2 = <Link className='navbar-brand' to={`/order/${this.state.custId}`}>Order</Link>
+          link1 =  <Link className='' to={`/welcome/${this.state.custId1}`} >Home</Link>
+          link2 = <Link className='' to={`/order/${this.state.custId1}`}>Order</Link>
           link3 = <button type='button' onClick={this.logout}>Log Out</button>
         } else {
           

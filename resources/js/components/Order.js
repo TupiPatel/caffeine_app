@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
-import { result } from 'lodash'
+import Header from './Header'
+
 
 class Order extends Component {
 
@@ -11,7 +11,7 @@ class Order extends Component {
       user: {},
       allFav:[],
       userId: localStorage.getItem('userId'),
-      userName: localStorage.getItem('userName'),
+      userName: localStorage.getItem('userName').toUpperCase(),
       loggedIn: (localStorage.getItem('loggedIn') === "true"),
 
       errors : [],
@@ -35,8 +35,9 @@ class Order extends Component {
       max_caffeine : '',
      arrCaffeine:[],
      totalCaffeine:0,
-      status:''
-
+      status:'',
+      showHideForm : true,
+      showHideInfo : false
     }
 
     if(localStorage.getItem('userId') === null){
@@ -45,9 +46,11 @@ class Order extends Component {
    
   
     this.handleFieldChange = this.handleFieldChange.bind(this)
-    this.handleCreateNewOrder = this.handleCreateNewOrder.bind(this)
+    this.handleOrderData = this.handleOrderData.bind(this)
     this.hasErrorFor = this.hasErrorFor.bind(this)
     this.renderErrorFor = this.renderErrorFor.bind(this)
+    this.handleCreateNewOrder = this.handleCreateNewOrder.bind(this)
+    this.handleBack = this.handleBack.bind(this)
     
   }
 
@@ -56,20 +59,28 @@ class Order extends Component {
             [event.target.name]: event.target.value
         })
   }
+  handleBack(){
+   
+    const { showHideForm} = this.state;
+    const { showHideInfo} = this.state;
 
-  handleCreateNewOrder (event) {
+    this.setState({
+      showHideForm:!showHideForm,
+      showHideInfo:!showHideInfo
+
+    })
+    
+  }
+
+  handleOrderData (event) {
     event.preventDefault()
 
-    const { history } = this.props
     const custId = this.props.match.params.id
     this.state.arrCaffeine = []
     this.state.errors = []
-
-  
-
-    console.log("enterd")
-    console.log(this.state.drink)
-    console.log(this.state.size)
+    const { showHideForm} = this.state;
+    const { showHideInfo} = this.state;
+   
    
     if(this.state.drink == 1)
         this.state.drinkName= 'Monster Ultra Sunrise'
@@ -104,58 +115,118 @@ class Order extends Component {
       this.state.caffeine = ''
     }
    
-
-
-    const order = {
-      custId : custId,
-      drink : this.state.drinkName,
-      size : this.state.drinkSize,
-      caffeine : this.state.caffeine
-      
+    if(this.state.drink == ''){
+      this.setState({
+        showHideForm:showHideForm,
+        showHideInfo:showHideInfo
+  
+      })
+     
+     this.setState({
+       errDrink : "The drink is required",
+       errSize : ''
+     })
     }
+   else if(this.state.size == ''){
+      this.setState({
+        showHideForm:showHideForm,
+        showHideInfo:showHideInfo
+  
+      })
+     
+     this.setState({
+       errSize : "The size is required",
+       errDrink : "",
+
+     })
+    }
+
+  else{
+    this.setState({
+      drinkType: this.state.drinkName,
+      sizeType: this.state.drinkSize,
+    })
+    
 
     axios.get(`/api/customer/${custId}`).then(response => {
       console.log("customer info")
       console.log(response.data);
       this.setState({
-        user: response.data,
-        allFav:response.data.beverages.split(','),
         max_caffeine: response.data.max_consumed
       })
     })
 
+
+    axios.get(`/api/customer/transaction/${custId}`,"dfd").then(response => {
+      console.log("transaction info")
+      
+      console.log(response.data);
+
+      const list = response.data.map((item) => {
+ 
+        this.state.arrCaffeine.push(parseInt(item.caffeine))
+      })
+      this.state.arrCaffeine.push(parseInt(this.state.caffeine))
+
+      this.state.totalCaffeine =  this.state.arrCaffeine.reduce((result,number)=> result+number);
+
+      console.log("current caffeine")
+      console.log(this.state.totalCaffeine)
+
+      if(this.state.max_caffeine < this.state.totalCaffeine){
+        this.setState({
+          status : 'You exceed your daily limit of caffeine which is '+this.state.totalCaffeine+'mg',
+          showHideForm:!showHideForm,
+          showHideInfo:!showHideInfo
+        })
+      }
+      else{
+        this.setState({
+          status : 'You can consume more caffeine as your maximum limit of caffeine is '+this.state.max_caffeine +'mg',
+          showHideForm:!showHideForm,
+          showHideInfo:!showHideInfo
+
+        })
+       
+      }
+
+     
+      
+    })
+    .catch(error => {
+        console.log(error.response.data)
+        this.setState({
+          errors: error.response.data.errors
+      
+        })
+      })
+    }
+    
+  }
+  handleCreateNewOrder(){
+    console.log("new order")
+      console.log(this.state.drinkSize)
+      const custId = this.props.match.params.id
+
+      const order = {
+        custId : custId,
+        drink : this.state.drinkName,
+        size : this.state.drinkSize,
+        caffeine : this.state.caffeine
+        
+      }
+
       axios.post('/api/order', order)
       .then(response => {
         // redirect to the homepage
+        console.log('order info')
         console.log(response.data)
-
-        axios.get(`/api/customer/transaction/${custId}`).then(response => {
-          console.log("customer info")
-          console.log(this.state.max_caffeine)
-          console.log(response.data);
-  
-          const list = response.data.map((item) => {
-            console.log(item.caffeine)
-            this.state.arrCaffeine.push(parseInt(item.caffeine))
-          })
-  
-          this.state.totalCaffeine =  this.state.arrCaffeine.reduce((result,number)=> result+number);
-  
-          console.log(this.state.totalCaffeine) // 15
-  
-          if(this.state.max_caffeine < this.state.totalCaffeine){
-            this.setState({
-              status : 'You exceed your daily limit of caffeine'
-            })
-          }
-          else{
-            this.setState({
-              status : 'You can consume more caffeine as your maximum limit of caffeine'
-            })
-           
-          }
+        
+        this.setState({
+          sucess : "Your order received sucessfully !!"
         })
        
+        
       })
       .catch(error => {
         console.log(error.response.data)
@@ -165,7 +236,6 @@ class Order extends Component {
         })
       })
   }
-
   hasErrorFor (field) {
     return !!this.state.errors[field]
   }
@@ -190,38 +260,70 @@ class Order extends Component {
         
         <option key={key} value={v.id}>{v.name}</option>
       ));
-
+      const { showHideForm} = this.state;
+      const { showHideInfo} = this.state;
      
         return (
           
             <div className='container py-4'>
+              <Header  />
+
             <div className='row justify-content-center'>
               <div className='col-md-6'>
                 <div className='card'>
                     
                     <div className='card-header'>Hi ,{this.state.userName} </div>
                     <div className="card-body">
-                        <div>Please place your order..</div>
-                        <div>{this.state.status}</div>
+                        
+                        { showHideInfo && (
+                          <div>
+                            <div className="text-success p-2"><b style={{ fontSize: '18px' }}>{this.state.sucess}</b></div>
+                            <div className="mb-3"><b>Here is your order...</b></div>
+                              <label className="mb-3">{this.state.status}</label>
+
+                              <div>
+                                  <div className='card'>
+                                      <div className='card-header'><b>Order Description </b> </div>
+                                      <div className="card-body">
+                                        <div>Type of drink : {this.state.drinkType}</div>
+                                        <div>Size: {this.state.sizeType}</div>
+                                        <div>Daily maximum limit of caffeine: {this.state.max_caffeine}mg</div>
+                                        <div>Today's total caffeine: {this.state.totalCaffeine}mg</div>
+                                      </div>
+                                  </div>
+                              </div>
+                             
+                              <button className='btn btn-primary float-left mt-4' onClick={this.handleBack}>Go back</button>
+                              <button className='btn btn-primary float-right mt-4' onClick={this.handleCreateNewOrder}>Checkout</button>
+                          </div>
+                        )}
                     </div>
+
+                    { showHideForm && (
+                      
                     <div className='card-body'>
-                        <form onSubmit={this.handleCreateNewOrder}>
-                        <div className='form-group'>
-                            <label>
-                            <b> Pick your favorite drink :</b>
-                            </label>
-                            <select 
-                                id="drink"
-                                name ="drink"
-                                value={this.state.value}
-                                className={`form-control ${this.hasErrorFor('drink') ? 'is-invalid' : ''}`}
-                                onChange={this.handleFieldChange}
-                             >
-                            <option value='0'>-- Select drink --</option>
-                            {optionDrink}
-                            </select>
-                            {this.renderErrorFor('drink')}
-                        </div>
+                      <div className="mb-3"><b>Please place your order..</b></div>
+                      <form onSubmit={this.handleOrderData}>
+                    
+                        <div>
+                              <div className='form-group'>
+                                <label>
+                                <b> Pick your favorite drink :</b>
+                                </label>
+                                <select 
+                                    id="drink"
+                                    name ="drink"
+                                    value={this.state.value}
+                                    className={`form-control ${this.hasErrorFor('drink') ? 'is-invalid' : ''}`}
+                                    onChange={this.handleFieldChange}
+                                    required
+                                >
+                                <option value='0'>-- Select drink --</option>
+                                {optionDrink}
+                                </select>
+                                <div className="text-danger">{this.state.errDrink}</div>
+                                {this.renderErrorFor('drink')}
+                            </div>
                             <div className='form-group'>
                                 <label htmlFor='size'><b>Size : </b></label>
                                 <select 
@@ -230,16 +332,24 @@ class Order extends Component {
                                     value={this.state.value}
                                     className={`form-control ${this.hasErrorFor('size') ? 'is-invalid' : ''}`}
                                     onChange={this.handleFieldChange}
+                                    required
+
                                 >
                                 <option value='0'>-- Select size --</option>
                                 {optionSize}
                                 </select>
+                                <div className="text-danger">{this.state.errSize}</div>
+
                                 {this.renderErrorFor('size')}
                             </div>
-                            <button className='btn btn-primary'>Checkout</button>
+                            </div>
+                            
+                            <button className='btn btn-primary float-right'>Next</button>
+                           
                         </form>
+                       
                     </div>
-                   
+                    )}
                 </div>
                 </div>
             </div>

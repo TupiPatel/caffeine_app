@@ -19,9 +19,9 @@ class App extends Component {
     return (
       <BrowserRouter  >
         <div>
-          <Header  />
+         
           <Switch>
-                <Route exact path='/' component={Login} />
+                <Route exact path='/' component={Login}  />
                 <Route exact path='/register' component={Register} />
                 <Route exact path='/welcome/:id' component={Welcome} />
                 <Route exact path='/order/:id' component={Order} />

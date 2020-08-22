@@ -1,6 +1,8 @@
 import axios from 'axios'
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import Header from './Header'
+
 
 class Welcome extends Component {
 
@@ -10,7 +12,7 @@ class Welcome extends Component {
       user: {},
       allFav:[],
       userId: localStorage.getItem('userId'),
-      userName: localStorage.getItem('userName'),
+      userName: localStorage.getItem('userName').toUpperCase(),
       loggedIn: (localStorage.getItem('loggedIn') === "true")
       
     }
@@ -48,6 +50,7 @@ class Welcome extends Component {
         return (
           
             <div className='container py-4'>
+              <Header  />
             <div className='row justify-content-center'>
               <div className='col-md-6'>
                 <div className='card'>
@@ -55,11 +58,11 @@ class Welcome extends Component {
                     <div className='card-body'>
                       <div>Your favourite drinks 
                         <div className='card-body'>
-                          {allFav.map((el,i) => <li key={i}>{el}</li> )}
+                          {allFav.map((el,i) => <li key={i}>{el.toUpperCase()}</li> )}
                           </div>
                         </div>
-                      <div>You can comsume maximum caffeine {user.max_consumed}mg</div>
-                      <div> <button className='btn btn-primary' onClick={this.order}>Order Now</button></div>
+                      <div>You can consume maximum caffeine {user.max_consumed}mg</div>
+                      <button className='btn btn-primary float-right mt-1' onClick={this.order}>Order Now</button>
                     </div>
                 </div>
                 </div>

@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types';
 import checkboxes from './checkboxes';
 import Checkbox from './Checkbox';
+import Header from './Header'
+
 
 class Register extends Component {
   constructor (props) {
@@ -124,15 +126,17 @@ class Register extends Component {
   render () {
     return (
       <div className='container py-4'>
+              <Header  />
+
         <div className='row justify-content-center'>
           <div className='col-md-6'>
             <div className='card'>
               {this.state.msg}
-              <div className='card-header'>Registration</div>
+              <div className='card-header display-6'><b>Registration</b></div>
               <div className='card-body'>
                 <form onSubmit={this.handleCreateNewProject}>
                  <div className='form-group'>
-                        <label htmlFor='firstname'><b>Firstname : </b></label>
+                        <label htmlFor='firstname'><b>First Name : </b></label>
                         <input
                         id='firstname'
                         type='text'
@@ -144,7 +148,7 @@ class Register extends Component {
                         {this.renderErrorFor('firstname')}
                     </div>
                     <div className='form-group'>
-                        <label htmlFor='lastname'><b>Lastname : </b></label>
+                        <label htmlFor='lastname'><b>Last Name : </b></label>
                         <input
                         id='lastname'
                         type='text'
@@ -197,7 +201,7 @@ class Register extends Component {
                             {
                             checkboxes.map(item => (
                                 <div key={item.key}>
-                                <Checkbox name={item.name} checked={this.state.checkedItems.get(item.name)} onChange={this.handleCheckboxChange} /> {item.name}
+                                <Checkbox name={item.name} checked={this.state.checkedItems.get(item.name)} onChange={this.handleCheckboxChange} /> {item.label}
                                 
                                 </div>
                             ))
@@ -205,7 +209,7 @@ class Register extends Component {
                         </React.Fragment>
                       </div>
                       <div className='form-group'>
-                        <label htmlFor='max_consumed'><b>Maximum caffeine consume per day : </b></label>
+                        <label htmlFor='max_consumed'><b>Maximum Caffeine Consume Per Day : </b></label>
                         <input
                         id='max_consumed'
                         type='text'
@@ -250,7 +254,7 @@ class Register extends Component {
                                   Other
                             </label>
                         </div>
-                        Selected option is : {this.state.selectedOption}
+                       
                     </div>
                   <button className='btn btn-primary'>Register</button>
                 </form>

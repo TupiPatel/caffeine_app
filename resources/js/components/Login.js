@@ -1,6 +1,8 @@
 import axios from 'axios'
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import Header from './Header'
+
 
 class Login extends Component {
   constructor (props) {
@@ -43,17 +45,15 @@ class Login extends Component {
       .then(response => {
         // redirect to the homepage
         console.log(response.data)
-        console.log(response.data['firstname'])
-
-        localStorage.setItem('userId', response.data['id']);
-        localStorage.setItem('userName', response.data['firstname']);
-        localStorage.setItem('loggedIn', "true");
-
+ 
         if(response.data['message'] == 'sucess'){
+          localStorage.setItem('userId', response.data['id']);
+          localStorage.setItem('userName', response.data['firstname']);
+          localStorage.setItem('loggedIn', "true");
           history.push('/welcome/'+response.data['id'])
         }
         else{
-          this.setState({ errMsg : "Not Exist"})
+          this.setState({ errMsg : "Invalid Email or Password"})
         }
        
       })
@@ -84,15 +84,18 @@ class Login extends Component {
   render () {
     return (
       <div className='container py-4'>
+              <Header  />
+
         <div className='row justify-content-center'>
           <div className='col-md-6'>
             <div className='card'>
-            {this.state.errMsg}
-              <div className='card-header'>Login</div>
+           
+              <div className='card-header'><b>Login</b></div>
+              <div className="text-danger p-3"> {this.state.errMsg}</div>
               <div className='card-body'>
                 <form onSubmit={this.handleCreateNewProject}>
                   <div className='form-group'>
-                    <label htmlFor='email'>Email</label>
+                    <label htmlFor='email'><b>Email</b></label>
                     <input
                       id='email'
                       type='text'
@@ -104,7 +107,7 @@ class Login extends Component {
                     {this.renderErrorFor('email')}
                   </div>
                   <div className='form-group'>
-                    <label htmlFor='password'>Password</label>
+                    <label htmlFor='password'><b>Password </b></label>
                     <input
                       id='password'
                       type='password'
@@ -115,8 +118,8 @@ class Login extends Component {
                     />
                     {this.renderErrorFor('password')}
                   </div>
-                  <button className='btn btn-primary'>Login</button>
-                  <Link  to='/register'>Create new account</Link>
+                  <div className="float-left"><button className='btn btn-primary '>Login</button></div>
+                  <div className="float-right"><Link  to='/register'>Create new account</Link></div>
                 </form>
               </div>
             </div>
