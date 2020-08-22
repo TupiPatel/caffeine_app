@@ -70412,7 +70412,11 @@ var Order = /*#__PURE__*/function (_Component) {
       var showHideInfo = this.state.showHideInfo;
       this.setState({
         showHideForm: !showHideForm,
-        showHideInfo: !showHideInfo
+        showHideInfo: !showHideInfo,
+        errSize: "",
+        errDrink: "",
+        drink: '',
+        size: ''
       });
     }
   }, {

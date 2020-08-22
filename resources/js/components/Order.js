@@ -66,7 +66,11 @@ class Order extends Component {
 
     this.setState({
       showHideForm:!showHideForm,
-      showHideInfo:!showHideInfo
+      showHideInfo:!showHideInfo,
+      errSize : "",
+      errDrink : "",
+      drink : '',
+      size:''
 
     })
     
