@@ -11,10 +11,11 @@ class Login extends Component {
       email: '',
       password: '',
       errMsg :'',
+      validUserMsg : localStorage.getItem('Register'),
       errors: []
     }
     this.handleFieldChange = this.handleFieldChange.bind(this)
-    this.handleCreateNewProject = this.handleCreateNewProject.bind(this)
+    this.handleLogin = this.handleLogin.bind(this)
     this.hasErrorFor = this.hasErrorFor.bind(this)
     this.renderErrorFor = this.renderErrorFor.bind(this)
 
@@ -31,7 +32,7 @@ class Login extends Component {
     })
   }
 
-  handleCreateNewProject (event) {
+  handleLogin (event) {
     event.preventDefault()
 
     const { history } = this.props
@@ -50,6 +51,7 @@ class Login extends Component {
           localStorage.setItem('userId', response.data['id']);
           localStorage.setItem('userName', response.data['firstname']);
           localStorage.setItem('loggedIn', "true");
+          localStorage.removeItem("Register");
           history.push('/welcome/'+response.data['id'])
         }
         else{
@@ -92,8 +94,11 @@ class Login extends Component {
            
               <div className='card-header'><b>Login</b></div>
               <div className="text-danger p-3"> <b> {this.state.errMsg} </b></div>
+
+              <div className="text-success p-2"><b style={{ fontSize: '18px' }}>{this.state.validUserMsg}</b></div>
+
               <div className='card-body'>
-                <form onSubmit={this.handleCreateNewProject}>
+                <form onSubmit={this.handleLogin}>
                   <div className='form-group'>
                     <label htmlFor='email'><b>Email</b></label>
                     <input

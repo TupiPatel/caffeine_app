@@ -27,7 +27,7 @@ class Register extends Component {
 
 
     this.handleFieldChange = this.handleFieldChange.bind(this)
-    this.handleCreateNewProject = this.handleCreateNewProject.bind(this)
+    this.handleCreateNewUser = this.handleCreateNewUser.bind(this)
     this.hasErrorFor = this.hasErrorFor.bind(this)
     this.renderErrorFor = this.renderErrorFor.bind(this)
     this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
@@ -44,13 +44,10 @@ class Register extends Component {
     
   }
 
-  handleCreateNewProject (event) {
+  handleCreateNewUser (event) {
     event.preventDefault()
 
     const { history } = this.props
-
-    //console.log("radio : "+this.state.selectedOption)
-
 
     for (let pair of this.state.checkedItems) {
       console.log(pair);
@@ -71,7 +68,7 @@ class Register extends Component {
    
     axios.post('/api/register', user)
       .then(response => {
-        // redirect to the homepage
+
         console.log(response.data)
 
         if(response.data == 'exist'){
@@ -79,6 +76,8 @@ class Register extends Component {
           
         }
         else{
+          localStorage.setItem('Register', "User has been registered successfully !!");
+
           history.push('/')
         }
        
@@ -135,7 +134,7 @@ class Register extends Component {
               <div className='card-header display-6'><b>Registration</b></div>
               <div className="text-danger p-3"><b>{this.state.errMsg}</b></div>
               <div className='card-body'>
-                <form onSubmit={this.handleCreateNewProject}>
+                <form onSubmit={this.handleCreateNewUser}>
                  <div className='form-group'>
                         <label htmlFor='firstname'><b>First Name : </b></label>
                         <input

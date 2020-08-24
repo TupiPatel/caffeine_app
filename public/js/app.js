@@ -70161,10 +70161,11 @@ var Login = /*#__PURE__*/function (_Component) {
       email: '',
       password: '',
       errMsg: '',
+      validUserMsg: localStorage.getItem('Register'),
       errors: []
     };
     _this.handleFieldChange = _this.handleFieldChange.bind(_assertThisInitialized(_this));
-    _this.handleCreateNewProject = _this.handleCreateNewProject.bind(_assertThisInitialized(_this));
+    _this.handleLogin = _this.handleLogin.bind(_assertThisInitialized(_this));
     _this.hasErrorFor = _this.hasErrorFor.bind(_assertThisInitialized(_this));
     _this.renderErrorFor = _this.renderErrorFor.bind(_assertThisInitialized(_this));
     var history = _this.props.history;
@@ -70182,8 +70183,8 @@ var Login = /*#__PURE__*/function (_Component) {
       this.setState(_defineProperty({}, event.target.name, event.target.value));
     }
   }, {
-    key: "handleCreateNewProject",
-    value: function handleCreateNewProject(event) {
+    key: "handleLogin",
+    value: function handleLogin(event) {
       var _this2 = this;
 
       event.preventDefault();
@@ -70200,6 +70201,7 @@ var Login = /*#__PURE__*/function (_Component) {
           localStorage.setItem('userId', response.data['id']);
           localStorage.setItem('userName', response.data['firstname']);
           localStorage.setItem('loggedIn', "true");
+          localStorage.removeItem("Register");
           history.push('/welcome/' + response.data['id']);
         } else {
           _this2.setState({
@@ -70244,9 +70246,15 @@ var Login = /*#__PURE__*/function (_Component) {
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("b", null, "Login")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "text-danger p-3"
       }, " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("b", null, " ", this.state.errMsg, " ")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "text-success p-2"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("b", {
+        style: {
+          fontSize: '18px'
+        }
+      }, this.state.validUserMsg)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "card-body"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("form", {
-        onSubmit: this.handleCreateNewProject
+        onSubmit: this.handleLogin
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "form-group"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
@@ -70747,7 +70755,7 @@ var Register = /*#__PURE__*/function (_Component) {
       errors: []
     };
     _this.handleFieldChange = _this.handleFieldChange.bind(_assertThisInitialized(_this));
-    _this.handleCreateNewProject = _this.handleCreateNewProject.bind(_assertThisInitialized(_this));
+    _this.handleCreateNewUser = _this.handleCreateNewUser.bind(_assertThisInitialized(_this));
     _this.hasErrorFor = _this.hasErrorFor.bind(_assertThisInitialized(_this));
     _this.renderErrorFor = _this.renderErrorFor.bind(_assertThisInitialized(_this));
     _this.handleCheckboxChange = _this.handleCheckboxChange.bind(_assertThisInitialized(_this));
@@ -70761,12 +70769,12 @@ var Register = /*#__PURE__*/function (_Component) {
       this.setState(_defineProperty({}, event.target.name, event.target.value));
     }
   }, {
-    key: "handleCreateNewProject",
-    value: function handleCreateNewProject(event) {
+    key: "handleCreateNewUser",
+    value: function handleCreateNewUser(event) {
       var _this2 = this;
 
       event.preventDefault();
-      var history = this.props.history; //console.log("radio : "+this.state.selectedOption)
+      var history = this.props.history;
 
       var _iterator = _createForOfIteratorHelper(this.state.checkedItems),
           _step;
@@ -70794,7 +70802,6 @@ var Register = /*#__PURE__*/function (_Component) {
         gender: this.state.selectedOption
       };
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/register', user).then(function (response) {
-        // redirect to the homepage
         console.log(response.data);
 
         if (response.data == 'exist') {
@@ -70802,6 +70809,7 @@ var Register = /*#__PURE__*/function (_Component) {
             errMsg: "User is already exist"
           });
         } else {
+          localStorage.setItem('Register', "User has been registered successfully !!");
           history.push('/');
         }
       })["catch"](function (error) {
@@ -70865,7 +70873,7 @@ var Register = /*#__PURE__*/function (_Component) {
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("b", null, this.state.errMsg)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "card-body"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("form", {
-        onSubmit: this.handleCreateNewProject
+        onSubmit: this.handleCreateNewUser
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "form-group"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
