@@ -21,7 +21,7 @@ class Register extends Component {
       setCheckedItems :  [],
       max_consumed: '',
       selectedOption: 'Male',
-      msg :'',
+      errMsg :'',
       errors: []
     }
 
@@ -75,7 +75,7 @@ class Register extends Component {
         console.log(response.data)
 
         if(response.data == 'exist'){
-          this.setState({ msg : "Already Exist"})
+          this.setState({ errMsg : "User is already exist"})
           
         }
         else{
@@ -131,8 +131,9 @@ class Register extends Component {
         <div className='row justify-content-center'>
           <div className='col-md-6'>
             <div className='card'>
-              {this.state.msg}
+            
               <div className='card-header display-6'><b>Registration</b></div>
+              <div className="text-danger p-3"><b>{this.state.errMsg}</b></div>
               <div className='card-body'>
                 <form onSubmit={this.handleCreateNewProject}>
                  <div className='form-group'>

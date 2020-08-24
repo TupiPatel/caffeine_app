@@ -61,7 +61,7 @@ class Welcome extends Component {
                           {allFav.map((el,i) => <li key={i}>{el.toUpperCase()}</li> )}
                           </div>
                         </div>
-                      <div>You can consume maximum caffeine {user.max_consumed}mg</div>
+                      <div>You can consume maximum caffeine {user.max_consumed}mg everyday</div>
                       <button className='btn btn-primary float-right mt-1' onClick={this.order}>Order Now</button>
                     </div>
                 </div>

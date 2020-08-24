@@ -70243,7 +70243,7 @@ var Login = /*#__PURE__*/function (_Component) {
         className: "card-header"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("b", null, "Login")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "text-danger p-3"
-      }, " ", this.state.errMsg), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      }, " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("b", null, " ", this.state.errMsg, " ")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "card-body"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("form", {
         onSubmit: this.handleCreateNewProject
@@ -70522,6 +70522,8 @@ var Order = /*#__PURE__*/function (_Component) {
       console.log("new order");
       console.log(this.state.drinkSize);
       var custId = this.props.match.params.id;
+      var showHideForm = this.state.showHideForm;
+      var showHideInfo = this.state.showHideInfo;
       var order = {
         custId: custId,
         drink: this.state.drinkName,
@@ -70534,7 +70536,13 @@ var Order = /*#__PURE__*/function (_Component) {
         console.log(response.data);
 
         _this3.setState({
-          sucess: "Your order received sucessfully !!"
+          sucess: "Your order received sucessfully !!",
+          showHideForm: !showHideForm,
+          showHideInfo: !showHideInfo,
+          drink: '',
+          size: '',
+          errSize: "",
+          errDrink: ""
         });
       })["catch"](function (error) {
         console.log(error.response.data);
@@ -70588,12 +70596,6 @@ var Order = /*#__PURE__*/function (_Component) {
       }, "Hi ,", this.state.userName, " "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "card-body"
       }, showHideInfo && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-        className: "text-success p-2"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("b", {
-        style: {
-          fontSize: '18px'
-        }
-      }, this.state.sucess)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "mb-3"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("b", null, "Here is your order...")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
         className: "mb-3"
@@ -70612,6 +70614,12 @@ var Order = /*#__PURE__*/function (_Component) {
       }, "Checkout"))), showHideForm && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "card-body"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "text-success p-2"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("b", {
+        style: {
+          fontSize: '18px'
+        }
+      }, this.state.sucess)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "mb-3"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("b", null, "Please place your order..")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("form", {
         onSubmit: this.handleOrderData
@@ -70628,7 +70636,7 @@ var Order = /*#__PURE__*/function (_Component) {
         value: "0"
       }, "-- Select drink --"), optionDrink), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "text-danger"
-      }, this.state.errDrink), this.renderErrorFor('drink')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("b", null, this.state.errDrink)), this.renderErrorFor('drink')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "form-group"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
         htmlFor: "size"
@@ -70643,7 +70651,7 @@ var Order = /*#__PURE__*/function (_Component) {
         value: "0"
       }, "-- Select size --"), optionSize), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "text-danger"
-      }, this.state.errSize), this.renderErrorFor('size'))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("b", null, this.state.errSize)), this.renderErrorFor('size'))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
         className: "btn btn-primary float-right"
       }, "Next")))))));
     }
@@ -70735,7 +70743,7 @@ var Register = /*#__PURE__*/function (_Component) {
       setCheckedItems: [],
       max_consumed: '',
       selectedOption: 'Male',
-      msg: '',
+      errMsg: '',
       errors: []
     };
     _this.handleFieldChange = _this.handleFieldChange.bind(_assertThisInitialized(_this));
@@ -70791,7 +70799,7 @@ var Register = /*#__PURE__*/function (_Component) {
 
         if (response.data == 'exist') {
           _this2.setState({
-            msg: "Already Exist"
+            errMsg: "User is already exist"
           });
         } else {
           history.push('/');
@@ -70850,9 +70858,11 @@ var Register = /*#__PURE__*/function (_Component) {
         className: "col-md-6"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "card"
-      }, this.state.msg, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "card-header display-6"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("b", null, "Registration")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "text-danger p-3"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("b", null, this.state.errMsg)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "card-body"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("form", {
         onSubmit: this.handleCreateNewProject
@@ -71098,7 +71108,7 @@ var Welcome = /*#__PURE__*/function (_Component) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", {
           key: i
         }, el.toUpperCase());
-      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, "You can consume maximum caffeine ", user.max_consumed, "mg"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, "You can consume maximum caffeine ", user.max_consumed, "mg everyday"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
         className: "btn btn-primary float-right mt-1",
         onClick: this.order
       }, "Order Now"))))));

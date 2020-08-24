@@ -91,7 +91,7 @@ class Login extends Component {
             <div className='card'>
            
               <div className='card-header'><b>Login</b></div>
-              <div className="text-danger p-3"> {this.state.errMsg}</div>
+              <div className="text-danger p-3"> <b> {this.state.errMsg} </b></div>
               <div className='card-body'>
                 <form onSubmit={this.handleCreateNewProject}>
                   <div className='form-group'>

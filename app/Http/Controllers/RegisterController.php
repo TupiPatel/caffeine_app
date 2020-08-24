@@ -18,10 +18,10 @@ class RegisterController extends Controller
 
         $validatedData = $request->validate([
             'firstname' => 'required',
-            'email' => 'required',
+            'email' => 'required|email',
             'password' => 'required|confirmed|min:6',
             'password_confirmation' => 'required',
-            'max_consumed' => 'required'
+            'max_consumed' => 'required|numeric'
           ]);
 
           $count = count($request->beverages);

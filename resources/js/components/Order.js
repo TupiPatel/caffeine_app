@@ -211,6 +211,8 @@ class Order extends Component {
     console.log("new order")
       console.log(this.state.drinkSize)
       const custId = this.props.match.params.id
+      const { showHideForm} = this.state;
+      const { showHideInfo} = this.state;
 
       const order = {
         custId : custId,
@@ -227,7 +229,13 @@ class Order extends Component {
         console.log(response.data)
         
         this.setState({
-          sucess : "Your order received sucessfully !!"
+          sucess : "Your order received sucessfully !!",
+          showHideForm:!showHideForm,
+           showHideInfo:!showHideInfo,
+           drink: '',
+           size:'',
+           errSize : "",
+           errDrink : "",
         })
        
         
@@ -281,9 +289,9 @@ class Order extends Component {
                         
                         { showHideInfo && (
                           <div>
-                            <div className="text-success p-2"><b style={{ fontSize: '18px' }}>{this.state.sucess}</b></div>
+                           
                             <div className="mb-3"><b>Here is your order...</b></div>
-                              <label className="mb-3">{this.state.status}</label>
+                            <label className="mb-3">{this.state.status}</label>
 
                               <div>
                                   <div className='card'>
@@ -306,7 +314,9 @@ class Order extends Component {
                     { showHideForm && (
                       
                     <div className='card-body'>
+                       <div className="text-success p-2"><b style={{ fontSize: '18px' }}>{this.state.sucess}</b></div>
                       <div className="mb-3"><b>Please place your order..</b></div>
+                  
                       <form onSubmit={this.handleOrderData}>
                     
                         <div>
@@ -325,7 +335,7 @@ class Order extends Component {
                                 <option value='0'>-- Select drink --</option>
                                 {optionDrink}
                                 </select>
-                                <div className="text-danger">{this.state.errDrink}</div>
+                                <div className="text-danger"><b>{this.state.errDrink}</b></div>
                                 {this.renderErrorFor('drink')}
                             </div>
                             <div className='form-group'>
@@ -342,7 +352,7 @@ class Order extends Component {
                                 <option value='0'>-- Select size --</option>
                                 {optionSize}
                                 </select>
-                                <div className="text-danger">{this.state.errSize}</div>
+                                <div className="text-danger"><b>{this.state.errSize}</b></div>
 
                                 {this.renderErrorFor('size')}
                             </div>
